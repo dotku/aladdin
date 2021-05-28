@@ -9,8 +9,18 @@ import {
   FlatList,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { TabOneParamList } from "../types";
 import { Text, View } from "../components/Themed";
+
+type WishList = Array<{ id: number; title: string; counter: number }>;
+type TabOneNavigationProp = StackNavigationProp<
+  TabOneParamList,
+  "TabOneScreen"
+>;
+type Props = {
+  navigation: TabOneNavigationProp;
+};
 
 const storeData = async () => {
   const wishList = await AsyncStorage.getItem("@wishList");
@@ -33,9 +43,7 @@ const storeData = async () => {
 
 storeData();
 
-type WishList = Array<{ id: number; title: string; counter: number }>;
-
-export default function TabOneScreen({ navigation }) {
+export default function TabOneScreen({ navigation }: Props) {
   const inputRef = useRef() as RefObject<TextInput>;
   const [inputContent, setInputContent] = useState("");
   const [wishList, setWishList] = useState<WishList>([]);
