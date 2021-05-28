@@ -1,7 +1,7 @@
-# Wishlist
+# Aladdin
 
-A app to manage the wish that user would like to create. It would be used for
-seller to find the potential customer.
+A service to manage the wish that user would like to create. It would be used to
+build the relationship between sellers and buyers.
 
 ## Todo
 
