@@ -25,6 +25,18 @@ export type RequireParamList = {
   RequireScreen: undefined;
 };
 
+export type PublishParamList = {
+  Root: undefined;
+};
+
+export type ChatParamList = {
+  ChatScreen: undefined;
+};
+
+export type AccountParamList = {
+  AccountScreen: undefined;
+};
+
 export type AboutParamList = {
   AboutScreen: undefined;
 };

@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
 
-export default function PublishScreen() {
+export default function ChatScreen() {
   return (
     <View style={styles.container}>
       <Text style={{ margin: 30 }}>Under construction.</Text>

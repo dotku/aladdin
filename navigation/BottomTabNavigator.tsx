@@ -13,12 +13,17 @@ import useColorScheme from "../hooks/useColorScheme";
 import ServeScreen from "../screens/ServeScreen";
 import RequireScreen from "../screens/RequireScreen";
 import PublishScreen from "../screens/PublishScreen";
+import ChatScreen from "../screens/ChatScreen";
+import AccountScreen from "../screens/AccountScreen";
 import AboutScreen from "../screens/AboutScreen";
 import {
   BottomTabParamList,
   ServeParamList,
   RequireParamList,
   AboutParamList,
+  PublishParamList,
+  ChatParamList,
+  AccountParamList,
 } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -57,13 +62,13 @@ export default function BottomTabNavigator() {
         component={PublishNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-add" color={color} />
+            <TabBarIcon name="ios-add-circle" color={color} />
           ),
         }}
       />
       <BottomTab.Screen
         name="Chat"
-        component={ServeNavigator}
+        component={ChatNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-chatbubbles-outline" color={color} />
@@ -72,11 +77,11 @@ export default function BottomTabNavigator() {
       />
 
       <BottomTab.Screen
-        name="About"
-        component={AboutNavigator}
+        name="Account"
+        component={AccountNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-information-circle-outline" color={color} />
+            <TabBarIcon name="ios-person-outline" color={color} />
           ),
         }}
       />
@@ -124,17 +129,17 @@ function ServeNavigator() {
   );
 }
 
-const PublishStack = createStackNavigator<AboutParamList>();
+const PublishStack = createStackNavigator<PublishParamList>();
 
 function PublishNavigator() {
   return (
-    <AboutStack.Navigator>
-      <AboutStack.Screen
-        name="AboutScreen"
-        component={AboutScreen}
-        options={{ headerTitle: "About" }}
+    <PublishStack.Navigator>
+      <PublishStack.Screen
+        name="Root"
+        component={PublishScreen}
+        options={{ headerTitle: "Publish" }}
       />
-    </AboutStack.Navigator>
+    </PublishStack.Navigator>
   );
 }
 
@@ -149,5 +154,33 @@ function AboutNavigator() {
         options={{ headerTitle: "About" }}
       />
     </AboutStack.Navigator>
+  );
+}
+
+const ChatStack = createStackNavigator<ChatParamList>();
+
+function ChatNavigator() {
+  return (
+    <ChatStack.Navigator>
+      <ChatStack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{ headerTitle: "Chat" }}
+      />
+    </ChatStack.Navigator>
+  );
+}
+
+const AccountStack = createStackNavigator<AccountParamList>();
+
+function AccountNavigator() {
+  return (
+    <AccountStack.Navigator>
+      <AccountStack.Screen
+        name="AccountScreen"
+        component={AccountScreen}
+        options={{ headerTitle: "Account" }}
+      />
+    </AccountStack.Navigator>
   );
 }
