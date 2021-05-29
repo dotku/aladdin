@@ -10,16 +10,16 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { TabOneParamList } from "../types";
+import { RequireParamList } from "../types";
 import { Text, View } from "../components/Themed";
 
 type WishList = Array<{ id: number; title: string; counter: number }>;
-type TabOneNavigationProp = StackNavigationProp<
-  TabOneParamList,
-  "TabOneScreen"
+type RequireNavigationProp = StackNavigationProp<
+  RequireParamList,
+  "RequireScreen"
 >;
 type Props = {
-  navigation: TabOneNavigationProp;
+  navigation: RequireNavigationProp;
 };
 
 const storeData = async () => {
@@ -43,7 +43,7 @@ const storeData = async () => {
 
 storeData();
 
-export default function TabOneScreen({ navigation }: Props) {
+export default function RequireScreen({ navigation }: Props) {
   const inputRef = useRef() as RefObject<TextInput>;
   const [inputContent, setInputContent] = useState("");
   const [wishList, setWishList] = useState<WishList>([]);
