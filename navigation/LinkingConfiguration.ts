@@ -25,6 +25,11 @@ export default {
           },
         },
       },
+      Help: {
+        screens: {
+          HelpScreen: "help"
+        }
+      },
       NotFound: '*',
     },
   },

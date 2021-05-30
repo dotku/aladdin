@@ -17,6 +17,7 @@ import CategoryScreen from "../screens/CategoryScreen";
 import ChatScreen from "../screens/ChatScreen";
 import AccountScreen from "../screens/AccountScreen";
 import AboutScreen from "../screens/AboutScreen";
+import MarketScreen from "../screens/MarketScreen";
 import {
   BottomTabParamList,
   ServeParamList,
@@ -106,7 +107,7 @@ const RequireStack = createStackNavigator<RequireParamList>();
 
 function RequireNavigator() {
   return (
-    <RequireStack.Navigator>
+    <RequireStack.Navigator initialRouteName="MarketScreen">
       <RequireStack.Screen
         name="RequireScreen"
         component={RequireScreen}
@@ -116,6 +117,11 @@ function RequireNavigator() {
         name="CategoryScreen"
         component={CategoryScreen}
         options={{ headerTitle: "Category" }}
+      />
+      <RequireStack.Screen
+        name="MarketScreen"
+        component={MarketScreen}
+        options={{ headerTitle: "Market" }}
       />
     </RequireStack.Navigator>
   );

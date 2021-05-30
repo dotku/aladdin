@@ -5,6 +5,7 @@
 
 export type RootStackParamList = {
   Root: undefined;
+  Help: undefined;
   NotFound: undefined;
 };
 
@@ -24,6 +25,7 @@ export type ServeParamList = {
 export type RequireParamList = {
   RequireScreen: undefined;
   CategoryScreen: undefined;
+  MarketScreen: undefined;
 };
 
 export type PublishParamList = {
@@ -36,6 +38,7 @@ export type ChatParamList = {
 
 export type AccountParamList = {
   AccountScreen: undefined;
+  HelpScreen: undefined;
 };
 
 export type AboutParamList = {
