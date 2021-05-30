@@ -13,6 +13,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import ServeScreen from "../screens/ServeScreen";
 import RequireScreen from "../screens/RequireScreen";
 import PublishScreen from "../screens/PublishScreen";
+import CategoryScreen from "../screens/CategoryScreen";
 import ChatScreen from "../screens/ChatScreen";
 import AccountScreen from "../screens/AccountScreen";
 import AboutScreen from "../screens/AboutScreen";
@@ -111,6 +112,11 @@ function RequireNavigator() {
         component={RequireScreen}
         options={{ headerTitle: "Require" }}
       />
+      <RequireStack.Screen
+        name="CategoryScreen"
+        component={CategoryScreen}
+        options={{ headerTitle: "Category" }}
+      />
     </RequireStack.Navigator>
   );
 }
@@ -135,7 +141,7 @@ function PublishNavigator() {
   return (
     <PublishStack.Navigator>
       <PublishStack.Screen
-        name="Root"
+        name="PublishScreen"
         component={PublishScreen}
         options={{ headerTitle: "Publish" }}
       />

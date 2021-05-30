@@ -12,8 +12,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RequireParamList } from "../types";
 import { Text, View } from "../components/Themed";
+import WishlistItemText from "../components/WishlistItemText";
+import { Wishlist, WishlistItem } from "../types";
+import { ListItem } from "react-native-elements";
+import defaultWishlist from "../__tests__/data/defaultWishlist";
+import { useLinkTo, useNavigation } from "@react-navigation/native";
 
-type WishList = Array<{ id: number; title: string; counter: number }>;
 type RequireNavigationProp = StackNavigationProp<
   RequireParamList,
   "RequireScreen"
@@ -27,14 +31,7 @@ const storeData = async () => {
   console.log("storeData", wishList);
   if (!wishList) {
     try {
-      await AsyncStorage.setItem(
-        "@wishList",
-        JSON.stringify([
-          { id: 1, title: "Car", counter: 1 },
-          { id: 2, title: "House", counter: 1 },
-          { id: 3, title: "Hapiness", counter: 1 },
-        ])
-      );
+      await AsyncStorage.setItem("@wishList", JSON.stringify(defaultWishlist));
     } catch (e) {
       // saving error
     }
@@ -46,10 +43,11 @@ storeData();
 export default function RequireScreen({ navigation }: Props) {
   const inputRef = useRef() as RefObject<TextInput>;
   const [inputContent, setInputContent] = useState("");
-  const [wishList, setWishList] = useState<WishList>([]);
+  const [wishList, setWishlist] = useState<Wishlist>([]);
+  const linkTo = useLinkTo();
 
   useEffect(() => {
-    genWishListFromStorage();
+    genWishlistFromStorage();
 
     const unsubscribe = navigation.addListener("focus", () => {
       if (inputRef.current) {
@@ -60,12 +58,12 @@ export default function RequireScreen({ navigation }: Props) {
     return unsubscribe;
   }, []);
 
-  const genWishListFromStorage = async () => {
+  const genWishlistFromStorage = async () => {
     try {
       const value = await AsyncStorage.getItem("@wishList");
       if (value !== null) {
         // value previously stored
-        setWishList(JSON.parse(value));
+        setWishlist(JSON.parse(value));
       }
     } catch (e) {
       // error reading value
@@ -73,9 +71,9 @@ export default function RequireScreen({ navigation }: Props) {
     }
   };
 
-  const genWishListUpdate = async (newWishList: WishList) => {
-    setWishList(newWishList);
-    await AsyncStorage.setItem("@wishList", JSON.stringify(newWishList));
+  const genWishlistUpdate = async (newWishlist: Wishlist) => {
+    setWishlist(newWishlist);
+    await AsyncStorage.setItem("@wishList", JSON.stringify(newWishlist));
   };
   const handleInputChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
@@ -86,22 +84,27 @@ export default function RequireScreen({ navigation }: Props) {
     e: NativeSyntheticEvent<TextInputKeyPressEventData>
   ) => {
     if (e.nativeEvent.key === "Enter") {
-      let newWishList = wishList;
+      let newWishlist = wishList;
       const duplicatedItem = wishList.find(
         (item) => item.title === inputContent
       );
       if (duplicatedItem !== undefined) {
-        newWishList = wishList.filter((item) => item.id !== duplicatedItem.id);
+        newWishlist = wishList.filter((item) => item.id !== duplicatedItem.id);
       }
-      await genWishListUpdate([
+      await genWishlistUpdate([
         {
           id: duplicatedItem
             ? duplicatedItem.id
             : wishList[wishList.length - 1].id + 1,
           title: inputContent,
-          counter: duplicatedItem ? duplicatedItem.counter + 1 : 1,
+          personal_require: duplicatedItem
+            ? duplicatedItem.personal_require + 1
+            : 1,
+          public_serve: duplicatedItem ? duplicatedItem.public_serve : 0,
+          personal_serve: duplicatedItem ? duplicatedItem.personal_serve : 0,
+          public_require: duplicatedItem ? duplicatedItem.public_require : 0,
         },
-        ...newWishList,
+        ...newWishlist,
       ]);
       setInputContent("");
 
@@ -110,6 +113,33 @@ export default function RequireScreen({ navigation }: Props) {
       }
     }
   };
+
+  const RequireListItemNew = ({
+    index,
+    item,
+  }: {
+    index: number;
+    item: WishlistItem;
+  }) => {
+    return (
+      <ListItem
+        key={index}
+        bottomDivider
+        onPress={() => {
+          navigation.navigate("CategoryScreen");
+        }}
+      >
+        <ListItem.Content>
+          <ListItem.Title>{item.title}</ListItem.Title>
+          <ListItem.Subtitle>
+            require/serve: {item.personal_require} / {item.public_serve}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+        <ListItem.Chevron />
+      </ListItem>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -127,29 +157,10 @@ export default function RequireScreen({ navigation }: Props) {
         darkColor="rgba(255,255,255,0.1)"
       />
       <FlatList
-        style={{ maxWidth: "80%", width: 500 }}
+        style={{ width: "100%" }}
         data={wishList}
         renderItem={({ index, item }) => (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text key={index.toString()}>
-              * {item.title} x {item.counter}
-            </Text>
-            <Text
-              accessibilityRole="button"
-              onPress={async () => {
-                await genWishListUpdate(
-                  wishList.filter((wishListItem) => wishListItem.id !== item.id)
-                );
-              }}
-            >
-              [x]
-            </Text>
-          </View>
+          <RequireListItemNew index={index} item={item} />
         )}
         keyExtractor={(item) => item.id.toString()}
       />

@@ -23,10 +23,11 @@ export type ServeParamList = {
 
 export type RequireParamList = {
   RequireScreen: undefined;
+  CategoryScreen: undefined;
 };
 
 export type PublishParamList = {
-  Root: undefined;
+  PublishScreen: undefined;
 };
 
 export type ChatParamList = {
@@ -40,3 +41,14 @@ export type AccountParamList = {
 export type AboutParamList = {
   AboutScreen: undefined;
 };
+
+export type WishlistItem = {
+  id: number;
+  title: string;
+  personal_require: number;
+  public_require: number;
+  public_serve: number;
+  personal_serve: number;
+};
+
+export type Wishlist = Array<WishlistItem>;

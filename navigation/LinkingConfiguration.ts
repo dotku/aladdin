@@ -12,14 +12,15 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          Require: {
             screens: {
-              TabOneScreen: 'one',
+              RequireScreen: "Require",
+              CategoryScreen: "Category"
             },
           },
-          TabTwo: {
+          Serve: {
             screens: {
-              TabTwoScreen: 'two',
+              ServeScreen: "Serve",
             },
           },
         },
