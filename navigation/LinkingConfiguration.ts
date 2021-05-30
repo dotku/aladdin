@@ -14,13 +14,13 @@ export default {
         screens: {
           Require: {
             screens: {
-              RequireScreen: "Require",
-              CategoryScreen: "Category"
+              RequireScreen: "require",
+              CategoryScreen: "category"
             },
           },
           Serve: {
             screens: {
-              ServeScreen: "Serve",
+              ServeScreen: "serve",
             },
           },
         },
