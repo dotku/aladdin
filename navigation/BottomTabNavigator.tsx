@@ -143,7 +143,7 @@ function PublishNavigator() {
     <PublishStack.Navigator>
       <PublishStack.Screen
         name="PublishScreen"
-        component={PublishScreen}
+        component={SpaceScreen}
         options={{ headerTitle: "Publish" }}
       />
     </PublishStack.Navigator>
