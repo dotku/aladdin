@@ -198,7 +198,7 @@ export default function SpaceScreen({ navigation }: Props) {
           onSubmitEditing={handleInputSubmitEditing}
           placeholder="input anything here."
           blurOnSubmit={false}
-          style={{ padding: 2 }}
+          style={{ padding: 2, width: "100%" }}
           ref={inputRef}
         />
       </View>
