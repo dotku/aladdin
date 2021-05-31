@@ -25,7 +25,7 @@ export type ServeParamList = {
 export type RequireParamList = {
   RequireScreen: undefined;
   CategoryScreen: undefined;
-  MarketScreen: undefined;
+  Space: undefined;
 };
 
 export type PublishParamList = {

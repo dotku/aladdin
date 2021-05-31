@@ -17,7 +17,7 @@ import CategoryScreen from "../screens/CategoryScreen";
 import ChatScreen from "../screens/ChatScreen";
 import AccountScreen from "../screens/AccountScreen";
 import AboutScreen from "../screens/AboutScreen";
-import MarketScreen from "../screens/MarketScreen";
+import SpaceScreen from "../screens/SpaceScreen";
 import {
   BottomTabParamList,
   ServeParamList,
@@ -46,7 +46,7 @@ export default function BottomTabNavigator() {
         component={RequireNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-bonfire-outline" color={color} />
+            <TabBarIcon name="ios-rocket-outline" color={color} />
           ),
         }}
       />
@@ -107,21 +107,16 @@ const RequireStack = createStackNavigator<RequireParamList>();
 
 function RequireNavigator() {
   return (
-    <RequireStack.Navigator initialRouteName="MarketScreen">
-      <RequireStack.Screen
-        name="RequireScreen"
-        component={RequireScreen}
-        options={{ headerTitle: "Require" }}
-      />
+    <RequireStack.Navigator initialRouteName="Space">
       <RequireStack.Screen
         name="CategoryScreen"
         component={CategoryScreen}
         options={{ headerTitle: "Category" }}
       />
       <RequireStack.Screen
-        name="MarketScreen"
-        component={MarketScreen}
-        options={{ headerTitle: "Market" }}
+        name="Space"
+        component={SpaceScreen}
+        options={{ headerTitle: "Space" }}
       />
     </RequireStack.Navigator>
   );
