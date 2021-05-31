@@ -48,8 +48,7 @@ export default function SpaceScreen({ navigation }: Props) {
   const [operations, setOperations] = useState<
     Array<{ key: string; value: boolean }>
   >([
-    { key: "say", value: false },
-    { key: "share", value: false },
+    { key: "impress", value: false },
     { key: "buy", value: false },
     { key: "sell", value: false },
     { key: "eat", value: false },
