@@ -95,6 +95,8 @@ export default function ServeScreen({ navigation }: Props) {
             ? duplicatedItem.personal_require
             : 0,
           public_serve: duplicatedItem ? duplicatedItem.public_serve + 1 : 1,
+          personal_serve: duplicatedItem ? duplicatedItem.public_serve + 1 : 1,
+          public_require: duplicatedItem ? duplicatedItem.public_serve + 1 : 1,
         },
         ...newWishlist,
       ]);

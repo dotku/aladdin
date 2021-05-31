@@ -12,10 +12,14 @@ export default {
     screens: {
       Root: {
         screens: {
+          Space: {
+            screens: {
+              SpaceScreen: "space"
+            }
+          },
           Require: {
             screens: {
-              RequireScreen: "require",
-              CategoryScreen: "category"
+              CategoryScreen: "category",
             },
           },
           Serve: {

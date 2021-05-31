@@ -15,7 +15,7 @@ import { RequireParamList } from "../types";
 import { Text, View } from "../components/Themed";
 import WishlistItemText from "../components/WishlistItemText";
 import { Wishlist, WishlistItem } from "../types";
-import { ListItem, CheckBox, ButtonGroup } from "react-native-elements";
+import { ListItem, CheckBox, ButtonGroup, Avatar } from "react-native-elements";
 import defaultWishlist from "../__tests__/data/defaultWishlist";
 import { useLinkTo, useNavigation } from "@react-navigation/native";
 
@@ -29,7 +29,7 @@ type Props = {
 
 const storeData = async () => {
   const wishlist = await AsyncStorage.getItem("@wishlist");
-  console.log("storeData", wishlist);
+  // console.log("storeData", wishlist);
   if (!wishlist) {
     try {
       await AsyncStorage.setItem("@wishlist", JSON.stringify(defaultWishlist));
@@ -156,17 +156,17 @@ export default function SpaceScreen({ navigation }: Props) {
     let foundedOperationItem = operations.find(
       (operationItem) => operationItem.key === key
     );
-    console.log("onPress");
-    console.log(
-      "ifFound",
-      operations.find((operationItem) => operationItem.key === key)
-    );
+    // console.log("onPress");
+    // console.log(
+    //   "ifFound",
+    //   operations.find((operationItem) => operationItem.key === key)
+    // );
 
     if (foundedOperationItem) {
       foundedOperationItem.value = !foundedOperationItem.value;
-      console.log("operations", operations, foundedOperationItem);
+      // console.log("operations", operations, foundedOperationItem);
       setOperations(operations);
-      console.log("operations", operations);
+      // console.log("operations", operations);
       setOperationListRerender(!operationListRerender);
     }
 
@@ -175,21 +175,41 @@ export default function SpaceScreen({ navigation }: Props) {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        value={inputContent}
-        onChange={handleInputChange}
-        onSubmitEditing={handleInputSubmitEditing}
-        placeholder="input anything here."
-        blurOnSubmit={false}
-        style={{ padding: 2 }}
-        ref={inputRef}
-      />
+      <View
+        style={{
+          flexDirection: "row",
+          width: "100%",
+          marginLeft: 10,
+          marginRight: 10,
+          marginTop: 5,
+          marginBottom: 5,
+          padding: 10,
+        }}
+      >
+        <Avatar
+          containerStyle={{ marginRight: 4 }}
+          rounded
+          source={{
+            uri: "https://i1.wp.com/nicholegabrielle.com/wp-content/uploads/2019/04/sample-avatar-003.jpg?ssl=1",
+          }}
+        />
+        <TextInput
+          value={inputContent}
+          onChange={handleInputChange}
+          onSubmitEditing={handleInputSubmitEditing}
+          placeholder="input anything here."
+          blurOnSubmit={false}
+          style={{ padding: 2 }}
+          ref={inputRef}
+        />
+      </View>
+
       <FlatList
         style={{ width: "100%" }}
         data={operations}
         extraData={operationListRerender}
         renderItem={({ item, index }) => {
-          console.log("checkbox", item);
+          // console.log("checkbox", item);
           return (
             <CheckBox
               key={index}
@@ -227,7 +247,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 32,
+    paddingTop: 18,
   },
   title: {
     fontSize: 20,

@@ -109,14 +109,14 @@ function RequireNavigator() {
   return (
     <RequireStack.Navigator initialRouteName="Space">
       <RequireStack.Screen
-        name="CategoryScreen"
-        component={CategoryScreen}
-        options={{ headerTitle: "Category" }}
-      />
-      <RequireStack.Screen
         name="Space"
         component={SpaceScreen}
         options={{ headerTitle: "Space" }}
+      />
+      <RequireStack.Screen
+        name="CategoryScreen"
+        component={CategoryScreen}
+        options={{ headerTitle: "Category" }}
       />
     </RequireStack.Navigator>
   );
