@@ -141,19 +141,12 @@ function ServeNavigator() {
 const PublishStack = createStackNavigator<PublishParamList>();
 
 function PublishNavigator() {
-  const navigation = useNavigation();
   return (
     <PublishStack.Navigator>
       <PublishStack.Screen
         name="PublishScreen"
-        component={SpaceScreen}
+        component={PublishScreen}
         options={{ headerTitle: "Publish" }}
-        listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
-            console.log("pressed");
-          },
-        }}
       />
     </PublishStack.Navigator>
   );
