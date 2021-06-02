@@ -21,6 +21,7 @@ import { useLinkTo, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { Image } from "react-native-elements/dist/image/Image";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import moment, { now } from "moment";
 
 const defaultWishlist = require("../__tests__/data/defaultWishlist.json");
 
@@ -34,9 +35,11 @@ type Props = {
 type newsItem = {
   aid: string;
   title: string;
-  thumb: string;
+  thumb?: string;
   sid: string;
-  url_show: string;
+  source?: string;
+  url_show?: string;
+  inputtime: string;
 };
 
 const storeData = async () => {
@@ -71,7 +74,7 @@ export default function SpaceScreen({ navigation }: Props) {
     { key: "do", value: false },
   ]);
   const [wishlist, setWishlist] = useState<Wishlist>([]);
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState<Array<newsItem>>([]);
   const linkTo = useLinkTo();
 
   useEffect(() => {
@@ -115,6 +118,10 @@ export default function SpaceScreen({ navigation }: Props) {
     setWishlist(newWishlist);
     await AsyncStorage.setItem("@wishlist", JSON.stringify(newWishlist));
   };
+
+  const genNewsAdd = async (newsItem: newsItem) => {
+    setNews([newsItem, ...news]);
+  };
   const handleInputChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
   ) => {
@@ -123,26 +130,33 @@ export default function SpaceScreen({ navigation }: Props) {
   const handleInputSubmitEditing = async (
     e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
   ) => {
-    let newWishlist = wishlist;
-    const duplicatedItem = wishlist.find((item) => item.title === inputContent);
-    if (duplicatedItem !== undefined) {
-      newWishlist = wishlist.filter((item) => item.id !== duplicatedItem.id);
-    }
-    await genWishlistUpdate([
-      {
-        id: duplicatedItem
-          ? duplicatedItem.id
-          : Math.max(...wishlist.map((item) => item.id)) + 1,
-        title: inputContent,
-        personal_require: duplicatedItem
-          ? duplicatedItem.personal_require + 1
-          : 1,
-        public_serve: duplicatedItem ? duplicatedItem.public_serve : 0,
-        personal_serve: duplicatedItem ? duplicatedItem.personal_serve : 0,
-        public_require: duplicatedItem ? duplicatedItem.public_require : 0,
-      },
-      ...newWishlist,
-    ]);
+    // let newWishlist = wishlist;
+    // const duplicatedItem = wishlist.find((item) => item.title === inputContent);
+    // if (duplicatedItem !== undefined) {
+    //   newWishlist = wishlist.filter((item) => item.id !== duplicatedItem.id);
+    // }
+    // await genWishlistUpdate([
+    //   {
+    //     id: duplicatedItem
+    //       ? duplicatedItem.id
+    //       : Math.max(...wishlist.map((item) => item.id)) + 1,
+    //     title: inputContent,
+    //     personal_require: duplicatedItem
+    //       ? duplicatedItem.personal_require + 1
+    //       : 1,
+    //     public_serve: duplicatedItem ? duplicatedItem.public_serve : 0,
+    //     personal_serve: duplicatedItem ? duplicatedItem.personal_serve : 0,
+    //     public_require: duplicatedItem ? duplicatedItem.public_require : 0,
+    //   },
+    //   ...newWishlist,
+    // ]);
+    await genNewsAdd({
+      aid: "vicky",
+      inputtime: new Date().toString(),
+      sid: Date.now().toString(),
+      title: inputContent,
+      source: "Aladdin Space",
+    });
     setInputContent("");
 
     if (inputRef.current) {
@@ -294,41 +308,64 @@ export default function SpaceScreen({ navigation }: Props) {
                       <View>
                         <Text style={{ color: "gray" }}>@{item.aid}</Text>
                       </View>
-                      <TouchableOpacity
-                        onPress={() => {
-                          console.log("press", item.url_show);
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            backgroundColor: "whitesmoke",
-                            marginTop: 8,
-                            borderRadius: 5,
+                      {item.thumb ? (
+                        <TouchableOpacity
+                          onPress={() => {
+                            console.log("press", item.url_show);
                           }}
                         >
-                          <Image
+                          <View
                             style={{
-                              width: 80,
-                              height: 80,
-                              borderRadius: 20,
-                              margin: 8,
-                            }}
-                            source={{ uri: item.thumb }}
-                          />
-                          <ListItem.Title
-                            style={{
-                              flexWrap: "wrap",
-                              margin: 8,
-                              marginTop: 10,
-                              marginLeft: 0,
-                              fontSize: 14,
+                              flexDirection: "row",
+                              backgroundColor: "whitesmoke",
+                              marginTop: 8,
+                              borderRadius: 5,
                             }}
                           >
-                            {item.title}
-                          </ListItem.Title>
-                        </View>
-                      </TouchableOpacity>
+                            <Image
+                              style={{
+                                width: 80,
+                                height: 80,
+                                borderRadius: 20,
+                                margin: 8,
+                              }}
+                              source={{ uri: item.thumb }}
+                            />
+                            <ListItem.Title
+                              style={{
+                                flexWrap: "wrap",
+                                margin: 8,
+                                marginTop: 10,
+                                marginLeft: 0,
+                                fontSize: 14,
+                              }}
+                            >
+                              {item.title}
+                            </ListItem.Title>
+                          </View>
+                        </TouchableOpacity>
+                      ) : (
+                        <ListItem.Title
+                          style={{
+                            flexWrap: "wrap",
+                            margin: 8,
+                            marginTop: 10,
+                            marginLeft: 0,
+                            fontSize: 14,
+                          }}
+                        >
+                          {item.title}
+                        </ListItem.Title>
+                      )}
+                      <View style={{ marginTop: 4, flexDirection: "row" }}>
+                        <Text style={{ color: "gray", fontSize: 12 }}>
+                          {moment(item.inputtime).fromNow()}
+                        </Text>
+                        <Text> · </Text>
+                        <Text style={{ color: "gray", fontSize: 12 }}>
+                          {item.source && item.source.split("@")[0]}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </ListItem.Content>
