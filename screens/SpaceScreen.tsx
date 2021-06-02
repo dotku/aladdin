@@ -8,6 +8,7 @@ import {
   TextInputSubmitEditingEventData,
   TextInputChangeEventData,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -265,74 +266,78 @@ export default function SpaceScreen({ navigation }: Props) {
         )}
         keyExtractor={(item) => item.id.toString()}
       /> */}
-      <FlatList
-        style={{ width: "100%" }}
-        data={news}
-        renderItem={({ item }: { item: newsItem }) => {
-          if (item.title[0] === "<") return null;
-          return (
-            <ListItem bottomDivider>
-              <ListItem.Content>
-                <View style={{ flexDirection: "row", marginRight: 8 }}>
-                  <View>
-                    <Avatar
-                      size="small"
-                      rounded
-                      containerStyle={{ marginRight: 8 }}
-                      activeOpacity={0.7}
-                      title={item.aid.substr(0, 2)}
-                      titleStyle={{ color: "white" }}
-                      overlayContainerStyle={{ backgroundColor: "gray" }}
-                    />
-                  </View>
-
-                  <View style={{ width: "100%", flex: 1 }}>
+      {!news.length ? (
+        <ActivityIndicator style={{ flex: 1 }} />
+      ) : (
+        <FlatList
+          style={{ width: "100%" }}
+          data={news}
+          renderItem={({ item }: { item: newsItem }) => {
+            if (item.title[0] === "<") return null;
+            return (
+              <ListItem bottomDivider>
+                <ListItem.Content>
+                  <View style={{ flexDirection: "row", marginRight: 8 }}>
                     <View>
-                      <Text style={{ color: "gray" }}>@{item.aid}</Text>
+                      <Avatar
+                        size="small"
+                        rounded
+                        containerStyle={{ marginRight: 8 }}
+                        activeOpacity={0.7}
+                        title={item.aid.substr(0, 2)}
+                        titleStyle={{ color: "white" }}
+                        overlayContainerStyle={{ backgroundColor: "gray" }}
+                      />
                     </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log("press", item.url_show);
-                      }}
-                    >
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          backgroundColor: "whitesmoke",
-                          marginTop: 8,
-                          borderRadius: 5,
+
+                    <View style={{ width: "100%", flex: 1 }}>
+                      <View>
+                        <Text style={{ color: "gray" }}>@{item.aid}</Text>
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          console.log("press", item.url_show);
                         }}
                       >
-                        <Image
+                        <View
                           style={{
-                            width: 80,
-                            height: 80,
-                            borderRadius: 20,
-                            margin: 8,
-                          }}
-                          source={{ uri: item.thumb }}
-                        />
-                        <ListItem.Title
-                          style={{
-                            flexWrap: "wrap",
-                            margin: 8,
-                            marginTop: 10,
-                            marginLeft: 0,
-                            fontSize: 14,
+                            flexDirection: "row",
+                            backgroundColor: "whitesmoke",
+                            marginTop: 8,
+                            borderRadius: 5,
                           }}
                         >
-                          {item.title}
-                        </ListItem.Title>
-                      </View>
-                    </TouchableOpacity>
+                          <Image
+                            style={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 20,
+                              margin: 8,
+                            }}
+                            source={{ uri: item.thumb }}
+                          />
+                          <ListItem.Title
+                            style={{
+                              flexWrap: "wrap",
+                              margin: 8,
+                              marginTop: 10,
+                              marginLeft: 0,
+                              fontSize: 14,
+                            }}
+                          >
+                            {item.title}
+                          </ListItem.Title>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              </ListItem.Content>
-            </ListItem>
-          );
-        }}
-        keyExtractor={(item: newsItem) => item.sid.toString()}
-      />
+                </ListItem.Content>
+              </ListItem>
+            );
+          }}
+          keyExtractor={(item: newsItem) => item.sid.toString()}
+        />
+      )}
     </View>
   );
 }
