@@ -9,7 +9,7 @@ import firebase from "firebase";
 import firebaseConfig from "./constants/FirebaseConfig";
 import axios from "axios";
 
-firebase.initializeApp(firebaseConfig);
+// firebase.initializeApp(firebaseConfig);
 
 export default function App() {
   const isLoadingComplete = useCachedResources();

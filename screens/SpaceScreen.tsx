@@ -22,6 +22,7 @@ import axios from "axios";
 import { Image } from "react-native-elements/dist/image/Image";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import moment, { now } from "moment";
+import debounce from "debounce";
 
 const defaultWishlist = require("../__tests__/data/defaultWishlist.json");
 
@@ -56,6 +57,14 @@ const storeData = async () => {
 
 storeData();
 
+function debounceEventHandler(...args) {
+  const debounced = debounce(...args);
+  return function (e) {
+    e.persist();
+    return debounced(e);
+  };
+}
+
 export default function SpaceScreen({ navigation }: Props) {
   const inputRef = useRef() as RefObject<TextInput>;
   const [inputContent, setInputContent] = useState("");
@@ -78,7 +87,18 @@ export default function SpaceScreen({ navigation }: Props) {
   const linkTo = useLinkTo();
 
   useEffect(() => {
-    genWishlistFromStorage();
+    const genNewsData = async () => {
+      try {
+        const serverData = await axios.get(
+          "https://cors.bridged.cc/m.cnbeta.com/touch/default/timeline.json"
+        );
+        console.log("ServerData", serverData);
+        setNews(serverData.data.result.list);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    // genWishlistFromStorage();
     genNewsData();
 
     const unsubscribe = navigation.addListener("focus", () => {
@@ -90,17 +110,6 @@ export default function SpaceScreen({ navigation }: Props) {
     return unsubscribe;
   }, []);
 
-  const genNewsData = async () => {
-    try {
-      const serverData = await axios.get(
-        "https://cors.bridged.cc/m.cnbeta.com/touch/default/timeline.json"
-      );
-      console.log("ServerData", serverData);
-      setNews(serverData.data.result.list);
-    } catch (e) {
-      console.error(e);
-    }
-  };
   const genWishlistFromStorage = async () => {
     try {
       const value = await AsyncStorage.getItem("@wishlist");
@@ -119,13 +128,11 @@ export default function SpaceScreen({ navigation }: Props) {
     await AsyncStorage.setItem("@wishlist", JSON.stringify(newWishlist));
   };
 
-  const genNewsAdd = async (newsItem: newsItem) => {
+  const handleNewsAdd = (newsItem: newsItem) => {
     setNews([newsItem, ...news]);
   };
-  const handleInputChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>
-  ) => {
-    setInputContent(e.nativeEvent.text);
+  const handleInputChange = (e) => {
+    setInputContent(() => e.target && e.target.value);
   };
   const handleInputSubmitEditing = async (
     e: NativeSyntheticEvent<TextInputSubmitEditingEventData>
@@ -150,9 +157,9 @@ export default function SpaceScreen({ navigation }: Props) {
     //   },
     //   ...newWishlist,
     // ]);
-    await genNewsAdd({
+    handleNewsAdd({
       aid: "vicky",
-      inputtime: new Date().toString(),
+      inputtime: new Date().toISOString(),
       sid: Date.now().toString(),
       title: inputContent,
       source: "Aladdin Space",
@@ -237,7 +244,7 @@ export default function SpaceScreen({ navigation }: Props) {
         />
         <TextInput
           value={inputContent}
-          onChange={handleInputChange}
+          onChangeText={handleInputChange}
           onSubmitEditing={handleInputSubmitEditing}
           placeholder="input anything here."
           blurOnSubmit={false}
@@ -287,7 +294,7 @@ export default function SpaceScreen({ navigation }: Props) {
           style={{ width: "100%", flex: 1 }}
           data={news}
           renderItem={({ item }: { item: newsItem }) => {
-            if (item.title[0] === "<") return null;
+            if (item.title && item.title[0] === "<") return null;
             return (
               <ListItem bottomDivider>
                 <ListItem.Content>

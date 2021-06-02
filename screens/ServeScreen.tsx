@@ -15,6 +15,7 @@ import { Text, View } from "../components/Themed";
 import WishlistItem from "../components/WishlistItemText";
 import { Wishlist } from "../types";
 import axios from "axios";
+const defaultWishlist = require("../__tests__/data/defaultWishlist.json");
 
 type ServeNavigationProp = StackNavigationProp<ServeParamList, "ServeScreen">;
 type Props = {
