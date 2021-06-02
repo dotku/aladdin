@@ -270,7 +270,7 @@ export default function SpaceScreen({ navigation }: Props) {
         <ActivityIndicator style={{ flex: 1 }} />
       ) : (
         <FlatList
-          style={{ width: "100%" }}
+          style={{ width: "100%", flex: 1 }}
           data={news}
           renderItem={({ item }: { item: newsItem }) => {
             if (item.title[0] === "<") return null;
