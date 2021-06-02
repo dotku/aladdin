@@ -16,8 +16,12 @@ import { Text, View } from "../components/Themed";
 import WishlistItemText from "../components/WishlistItemText";
 import { Wishlist, WishlistItem } from "../types";
 import { ListItem, CheckBox, ButtonGroup, Avatar } from "react-native-elements";
-import defaultWishlist from "../__tests__/data/defaultWishlist";
 import { useLinkTo, useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { Image } from "react-native-elements/dist/image/Image";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
+const defaultWishlist = require("../__tests__/data/defaultWishlist.json");
 
 type RequireNavigationProp = StackNavigationProp<
   RequireParamList,
@@ -25,6 +29,13 @@ type RequireNavigationProp = StackNavigationProp<
 >;
 type Props = {
   navigation: RequireNavigationProp;
+};
+type newsItem = {
+  aid: string;
+  title: string;
+  thumb: string;
+  sid: string;
+  url_show: string;
 };
 
 const storeData = async () => {
@@ -59,10 +70,12 @@ export default function SpaceScreen({ navigation }: Props) {
     { key: "do", value: false },
   ]);
   const [wishlist, setWishlist] = useState<Wishlist>([]);
+  const [news, setNews] = useState([]);
   const linkTo = useLinkTo();
 
   useEffect(() => {
     genWishlistFromStorage();
+    genNewsData();
 
     const unsubscribe = navigation.addListener("focus", () => {
       if (inputRef.current) {
@@ -73,6 +86,17 @@ export default function SpaceScreen({ navigation }: Props) {
     return unsubscribe;
   }, []);
 
+  const genNewsData = async () => {
+    try {
+      const serverData = await axios.get(
+        "https://cors.bridged.cc/m.cnbeta.com/touch/default/timeline.json"
+      );
+      console.log("ServerData", serverData);
+      setNews(serverData.data.result.list);
+    } catch (e) {
+      console.error(e);
+    }
+  };
   const genWishlistFromStorage = async () => {
     try {
       const value = await AsyncStorage.getItem("@wishlist");
@@ -188,6 +212,10 @@ export default function SpaceScreen({ navigation }: Props) {
         <Avatar
           containerStyle={{ marginRight: 4 }}
           rounded
+          title={"TT"}
+          titleStyle={{ color: "white" }}
+          placeholderStyle={{ backgroundColor: "lightgray" }}
+          activeOpacity={0.7}
           source={{
             uri: "https://i1.wp.com/nicholegabrielle.com/wp-content/uploads/2019/04/sample-avatar-003.jpg?ssl=1",
           }}
@@ -203,7 +231,7 @@ export default function SpaceScreen({ navigation }: Props) {
         />
       </View>
 
-      <FlatList
+      {/* <FlatList
         style={{ width: "100%" }}
         data={operations}
         extraData={operationListRerender}
@@ -222,20 +250,88 @@ export default function SpaceScreen({ navigation }: Props) {
           // console.log("key", index, _item);
           return _item.toString();
         }}
-      />
+      /> */}
 
-      <View
+      {/* <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
-      />
-      <FlatList
+      /> */}
+      {/* <FlatList
         style={{ width: "100%" }}
         data={wishlist}
         renderItem={({ index, item }) => (
           <RequireListItemNew index={index} item={item} />
         )}
         keyExtractor={(item) => item.id.toString()}
+      /> */}
+      <FlatList
+        style={{ width: "100%" }}
+        data={news}
+        renderItem={({ item }: { item: newsItem }) => {
+          if (item.title[0] === "<") return null;
+          return (
+            <ListItem bottomDivider>
+              <ListItem.Content>
+                <View style={{ flexDirection: "row", marginRight: 8 }}>
+                  <View>
+                    <Avatar
+                      size="small"
+                      rounded
+                      containerStyle={{ marginRight: 8 }}
+                      activeOpacity={0.7}
+                      title={item.aid.substr(0, 2)}
+                      titleStyle={{ color: "white" }}
+                      overlayContainerStyle={{ backgroundColor: "gray" }}
+                    />
+                  </View>
+
+                  <View style={{ width: "100%", flex: 1 }}>
+                    <View>
+                      <Text style={{ color: "gray" }}>@{item.aid}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log("press", item.url_show);
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          backgroundColor: "whitesmoke",
+                          marginTop: 8,
+                          borderRadius: 5,
+                        }}
+                      >
+                        <Image
+                          style={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: 20,
+                            margin: 8,
+                          }}
+                          source={{ uri: item.thumb }}
+                        />
+                        <ListItem.Title
+                          style={{
+                            flexWrap: "wrap",
+                            margin: 8,
+                            marginTop: 10,
+                            marginLeft: 0,
+                            fontSize: 14,
+                          }}
+                        >
+                          {item.title}
+                        </ListItem.Title>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ListItem.Content>
+            </ListItem>
+          );
+        }}
+        keyExtractor={(item: newsItem) => item.sid.toString()}
       />
     </View>
   );

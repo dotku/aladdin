@@ -14,7 +14,7 @@ import { ServeParamList } from "../types";
 import { Text, View } from "../components/Themed";
 import WishlistItem from "../components/WishlistItemText";
 import { Wishlist } from "../types";
-import defaultWishlist from "../__tests__/data/defaultWishlist";
+import axios from "axios";
 
 type ServeNavigationProp = StackNavigationProp<ServeParamList, "ServeScreen">;
 type Props = {
@@ -28,7 +28,7 @@ const storeData = async () => {
     try {
       await AsyncStorage.setItem("@wishList", JSON.stringify(defaultWishlist));
     } catch (e) {
-      // saving error
+      console.error(e);
     }
   }
 };
